@@ -1,25 +1,24 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
 
 const usuariosRoutes = require('./routes/usuarios');
 const registrosRoutes = require('./routes/registros');
-const consultaRoute = require('./routes/consulta'); // 👈 nueva ruta
+const consultaRoute = require('./routes/consulta');
 
 app.use(cors());
 app.use(express.json());
 
-// Rutas principales
 app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/registros', registrosRoutes);
-app.use('/consulta', consultaRoute); // 👈 aquí la añadimos
+app.use('/consulta', consultaRoute);
 
-// Ruta raíz
 app.get('/', (req, res) => {
-  res.json({ mensaje: 'API funcionando correctamente 🚀' });
+  res.json({ mensaje: 'API con MySQL funcionando 🚀' });
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor en ejecución en http://localhost:${PORT}`);
+  console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
