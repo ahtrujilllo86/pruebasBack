@@ -17,9 +17,14 @@ router.post('/', async (req, res) => {
 
     const newId = insertResult.insertId;
 
-    // 2) Obtener la fila insertada (opcional)
-    const [rows] = await pool.query('SELECT * FROM registros WHERE id = ?', [newId]);
-    const registro = rows[0] || { id: newId, codigo };
+    // 2) Obtener datos del usuario de acuerdo al codigo recibido
+    const [usuarios] = await pool.query('SELECT * FROM usuarios WHERE codigo = ?', [codigo]);
+
+    if (usuarios.length === 0) {
+      return res.status(404).json({ error: `No se encontró un usuario con el código ${codigo}` });
+    }
+
+    const usuario = usuarios[0];
 
     // 3) Petición externa
     const urlExterna = `https://wirepusher.com/send?id=TCF8mpzPW&title=Ingreso&message=Tarjeta:${codigo}&type=YourCustomType`;
@@ -35,6 +40,7 @@ router.post('/', async (req, res) => {
     // 4) Respuesta final
     res.json({
       mensaje: 'Consulta procesada y guardada',
+      usuario,
       registro,
       datos_externos: datosExternos
     });
