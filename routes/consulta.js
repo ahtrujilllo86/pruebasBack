@@ -41,7 +41,6 @@ router.post('/', async (req, res) => {
     res.json({
       mensaje: 'Consulta procesada y guardada',
       usuario,
-      registro,
       datos_externos: datosExternos
     });
   } catch (error) {
