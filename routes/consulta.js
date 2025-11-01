@@ -27,21 +27,29 @@ router.post('/', async (req, res) => {
     const usuario = usuarios[0];
 
     // 3) Petición externa
-    const urlExterna = `https://wirepusher.com/send?id=TCF8mpzPW&title=Ingreso&message=Tarjeta:${codigo}&type=YourCustomType`;
-    let datosExternos;
+    const urlExterna = 'https://api.textmebot.com/send.php';
+    let respuestaExterna;
+    const recipient = `521${usuario.telefono_contacto}`;
+    const apikey = process.env.WA_APIKEY;
+    const text = `El alumno ${usuario.alumno} ha ingresado al plantel`;
+
     try {
-      const respuesta = await axios.get(urlExterna);
-      datosExternos = respuesta.data;
+      const response = await axios.post(
+        urlExterna,
+        { recipient, apikey, text },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+      respuestaExterna = response.data;
     } catch (err) {
-      console.warn('No se pudo obtener datos externos:', err.message);
-      datosExternos = { aviso: 'No se pudo obtener datos externos' };
+      console.warn('No se pudo hacer la petición externa:', err.message);
+      respuestaExterna = { aviso: 'No se pudo obtener respuesta externa' };
     }
 
     // 4) Respuesta final
     res.json({
       mensaje: 'Consulta procesada y guardada',
       usuario,
-      datos_externos: datosExternos
+      respuesta_externa: respuestaExterna
     });
   } catch (error) {
     console.error('Error en /consulta:', error);
