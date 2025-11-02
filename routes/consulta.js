@@ -27,16 +27,16 @@ router.post('/', async (req, res) => {
     const usuario = usuarios[0];
 
     // 3) Petición externa
-    const urlExterna = 'https://api.textmebot.com/send.php';
+    const urlExterna = process.env.URL_WASEND;
     let respuestaExterna;
-    const recipient = `521${usuario.telefono_contacto}`;
-    const apikey = process.env.WA_APIKEY;
-    const text = `El alumno ${usuario.alumno} ha ingresado al plantel`;
+    const number = `521${usuario.telefono_contacto}`;
+    // const apikey = process.env.WA_APIKEY;
+    const message = `El alumno ${usuario.alumno} ha ingresado al plantel`;
 
     try {
       const response = await axios.post(
         urlExterna,
-        { recipient, apikey, text },
+        { number, message},
         { headers: { 'Content-Type': 'application/json' } }
       );
       respuestaExterna = response.data;
