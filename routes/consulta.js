@@ -42,6 +42,7 @@ router.post('/', async (req, res) => {
       respuestaExterna = response.data;
       console.log(respuestaExterna);
     } catch (err) {
+      console.log('URL externa', urlExterna);
       console.warn('No se pudo hacer la petición externa:', err.message);
       respuestaExterna = { aviso: 'No se pudo obtener respuesta externa' };
     }
