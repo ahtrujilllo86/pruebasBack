@@ -3,6 +3,7 @@ const express = require('express');
 const axios = require('axios');
 const router = express.Router();
 const pool = require('../db');
+const moment = require('moment-timezone');
 
 router.post('/', async (req, res) => {
   const { codigo } = req.body;
@@ -10,9 +11,11 @@ router.post('/', async (req, res) => {
 
   try {
     // 1) Insertar registro (created_at se llena por defecto si tu columna tiene DEFAULT CURRENT_TIMESTAMP)
+    // const hora_envio = new Date().toLocaleString("es-MX").format('YYYY-MM-DD HH:mm:ss');
+    const hora_envio = moment().tz('America/Mexico_City').format('YYYY-MM-DD HH:mm:ss');
     const [insertResult] = await pool.query(
-      'INSERT INTO registros (codigo) VALUES (?)',
-      [codigo]
+      'INSERT INTO registros (codigo, created_at) VALUES (?, ?)',
+      [codigo, hora_envio]
     );
 
     const newId = insertResult.insertId;
