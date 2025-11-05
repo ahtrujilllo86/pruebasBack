@@ -6,12 +6,14 @@ const app = express();
 const usuariosRoutes = require('./routes/usuarios');
 const registrosRoutes = require('./routes/registros');
 const consultaRoute = require('./routes/consulta');
+const registrosHTML = require('./routes/registrosHTML');
 
 app.use(cors());
 app.use(express.json());
 
 app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/registros', registrosRoutes);
+app.use('/registros', registrosHTML);
 app.use('/consulta', consultaRoute);
 
 app.get('/', (req, res) => {
