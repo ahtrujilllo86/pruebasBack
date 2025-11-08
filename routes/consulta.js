@@ -94,6 +94,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.post('/photo', async (req, res) => {
+  console.log(req);
   if (!req.file) {
       return res.status(400).json({ error: "No se recibió ninguna imagen" });
   }
