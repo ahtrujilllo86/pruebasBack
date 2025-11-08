@@ -74,6 +74,12 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Carpeta donde se guardarán las imágenes
+const uploadDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
 // Configurar Multer para guardar las imágenes en /uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

@@ -5,12 +5,6 @@ const app = express();
 const path = require("path");
 const fs = require("fs");
 
-// Carpeta donde se guardarán las imágenes
-const uploadDir = path.join(__dirname, "uploads");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
-}
-
 
 const usuariosRoutes = require('./routes/usuarios');
 const registrosRoutes = require('./routes/registros');
