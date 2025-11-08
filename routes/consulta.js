@@ -99,22 +99,17 @@ router.post('/photo', upload.single("file"), (req, res) => {
       return res.status(400).json({ error: "No se recibió ninguna imagen" });
   }
 
-  console.log("📸 Imagen recibida:");
-  console.log("Nombre:", req.file.filename);
-  console.log("Ruta local:", req.file.path);
-  console.log("Tamaño:", req.file.size, "bytes");
+// Generar URL pública de la imagen
+  const imageUrl = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
 
-  // Puedes mover o procesar la imagen aquí
-  // Ejemplo: leer su contenido
-  // const buffer = fs.readFileSync(req.file.path);
+  console.log("📸 Imagen recibida:", imageUrl);
 
   res.json({
     ok: true,
     mensaje: "Imagen recibida correctamente",
-    nombreArchivo: req.file.filename,
-    ruta: `/uploads/${req.file.filename}`
+    archivo: req.file.filename,
+    url: imageUrl,
   });
-
 });
 
 module.exports = router;
