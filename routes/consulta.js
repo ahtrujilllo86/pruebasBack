@@ -4,9 +4,12 @@ const axios = require('axios');
 const router = express.Router();
 const pool = require('../db');
 const moment = require('moment-timezone');
+const fs = require("fs");
+const path = require("path");
+const multer = require("multer");
 
 router.post('/', async (req, res) => {
-  const { codigo } = req.body;
+  const { codigo, imagen } = req.body;
   if (!codigo) return res.status(400).json({ error: 'Falta el parámetro "codigo"' });
 
   try {
@@ -27,19 +30,28 @@ router.post('/', async (req, res) => {
       return res.status(404).json({ error: `No se encontró un usuario con el código ${codigo}` });
     }
 
-    const usuario = usuarios[0];
+    const {
+      alumno, 
+      telefono_contacto, 
+      alertzy_key,
+    } = usuarios[0];
 
     // 3) Petición externa
-    const urlExterna = process.env.URL_WASEND;
+    // const urlExterna = process.env.URL_WASEND;
+    const urlExterna = process.env.URL_ALERTZY;
     let respuestaExterna;
-    const number = `521${usuario.telefono_contacto}`;
+    const number = `521${telefono_contacto}`;
     // const apikey = process.env.WA_APIKEY;
-    const message = `El alumno ${usuario.alumno} ha ingresado al plantel`;
+    const message = `El alumno ${alumno} ha ingresado al plantel`;
+    const accountKey = alertzy_key
+    const title = '';
+    const image = imagen ?? 'https://i.postimg.cc/137GJxF8/logocare.jpg';
 
     try {
       const response = await axios.post(
         urlExterna,
-        { number, message},
+        // { number, message},
+        {accountKey, title, message, image},
         { headers: { 'Content-Type': 'application/json' } }
       );
       respuestaExterna = response.data;
@@ -53,13 +65,55 @@ router.post('/', async (req, res) => {
     // 4) Respuesta final
     res.json({
       mensaje: 'Consulta procesada y guardada',
-      usuario,
+      alumno,
       respuesta_externa: respuestaExterna
     });
   } catch (error) {
     console.error('Error en /consulta:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
+});
+
+// Carpeta donde se guardarán las imágenes
+const uploadDir = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+// Configurar Multer para guardar las imágenes en /uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const timestamp = Date.now();
+    cb(null, `foto_${timestamp}.jpg`);
+  }
+});
+
+const upload = multer({ storage });
+
+router.post('/photo', async (req, res) => {
+  if (!req.file) {
+      return res.status(400).json({ error: "No se recibió ninguna imagen" });
+  }
+
+  console.log("📸 Imagen recibida:");
+  console.log("Nombre:", req.file.filename);
+  console.log("Ruta local:", req.file.path);
+  console.log("Tamaño:", req.file.size, "bytes");
+
+  // Puedes mover o procesar la imagen aquí
+  // Ejemplo: leer su contenido
+  // const buffer = fs.readFileSync(req.file.path);
+
+  res.json({
+    ok: true,
+    mensaje: "Imagen recibida correctamente",
+    nombreArchivo: req.file.filename,
+    ruta: `/uploads/${req.file.filename}`
+  });
+
 });
 
 module.exports = router;
