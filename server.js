@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const path = require("path");
+
 
 const usuariosRoutes = require('./routes/usuarios');
 const registrosRoutes = require('./routes/registros');
@@ -15,6 +17,8 @@ app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/registros', registrosRoutes);
 app.use('/registros', registrosHTML);
 app.use('/consulta', consultaRoute);
+// === Servir la carpeta uploads públicamente ===
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get('/', (req, res) => {
   res.json({ mensaje: 'API con MySQL funcionando 🚀' });
