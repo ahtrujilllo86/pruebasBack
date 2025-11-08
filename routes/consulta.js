@@ -75,7 +75,7 @@ router.post('/', async (req, res) => {
 });
 
 // Carpeta donde se guardarán las imágenes
-const uploadDir = path.join(__dirname, "uploads");
+const uploadDir = path.join(__dirname, "/tmp/uploads");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
@@ -99,7 +99,7 @@ router.post('/photo', upload.single("file"), (req, res) => {
   }
 
 // Generar URL pública de la imagen
-  const imageUrl = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+  const imageUrl = `${req.protocol}://${req.get("host")}/tmp/uploads/${req.file.filename}`;
 
   console.log("📸 Imagen recibida:", imageUrl);
 
