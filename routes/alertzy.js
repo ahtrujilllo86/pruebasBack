@@ -144,7 +144,7 @@ router.get('/', async (req, res) => {
                 </p>
             </div>
 
-            <form id="registroForm" action="http://localhost:3000/validations" method="POST">
+            <form id="registroForm" action="/validations" method="POST">
                 <label for="clave">Alumno</label>
                 <input type="text" id="clave" name="clave" readonly>
 
@@ -183,7 +183,7 @@ router.get('/', async (req, res) => {
             msgCodigo.style.color = '#333';
 
             try {
-            const res = await fetch('http://localhost:3000/validations/validateAppKey', {
+            const res = await fetch('/validations/validateAppKey', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ key: codigoVal, codigo: paramCode })
@@ -215,7 +215,7 @@ router.get('/', async (req, res) => {
 
             if (code) {
                 try {
-                    const res = await fetch('http://localhost:3000/validations/searchUid', {
+                    const res = await fetch('/validations/searchUid', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ code })
@@ -269,7 +269,7 @@ router.post('/', express.urlencoded({ extended: true }), async (req, res) => {
         );
 
         const {data} = sendPush;
-        
+
         if (data.response === 'success') {
         respuesta = {success: true};
         estatusCode = 200;
