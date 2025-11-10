@@ -10,6 +10,8 @@ const usuariosRoutes = require('./routes/usuarios');
 const registrosRoutes = require('./routes/registros');
 const consultaRoute = require('./routes/consulta');
 const registrosHTML = require('./routes/registrosHTML');
+const alertzy = require('./routes/alertzy');
+
 
 app.use(cors());
 app.use(express.json());
@@ -18,8 +20,8 @@ app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/registros', registrosRoutes);
 app.use('/registros', registrosHTML);
 app.use('/consulta', consultaRoute);
-// === Servir la carpeta uploads públicamente ===
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use('/validations', alertzy);
+
 
 app.get('/', (req, res) => {
   res.json({ mensaje: 'API con MySQL funcionando 🚀' });
