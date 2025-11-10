@@ -144,7 +144,7 @@ router.get('/', async (req, res) => {
                 </p>
             </div>
 
-            <form id="registroForm" action="pruebasback.railway.internal/validations" method="POST">
+            <form id="registroForm" action="https://pruebasback-production.up.railway.app/validations" method="POST">
                 <label for="clave">Alumno</label>
                 <input type="text" id="clave" name="clave" readonly>
 
@@ -183,7 +183,7 @@ router.get('/', async (req, res) => {
             msgCodigo.style.color = '#333';
 
             try {
-            const res = await fetch('pruebasback.railway.internal/validations/validateAppKey', {
+            const res = await fetch('https://pruebasback-production.up.railway.app/validations/validateAppKey', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ key: codigoVal, codigo: paramCode })
@@ -215,7 +215,7 @@ router.get('/', async (req, res) => {
 
             if (code) {
                 try {
-                    const res = await fetch('pruebasback.railway.internal/validations/searchUid', {
+                    const res = await fetch('https://pruebasback-production.up.railway.app/validations/searchUid', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ code })
