@@ -144,7 +144,7 @@ router.get('/', async (req, res) => {
                 </p>
             </div>
 
-            <form id="registroForm" action="/" method="POST">
+            <form id="registroForm" action="validations" method="POST">
                 <label for="clave">Alumno</label>
                 <input type="text" id="clave" name="clave" readonly>
 
@@ -184,7 +184,7 @@ router.get('/', async (req, res) => {
             msgCodigo.style.color = '#333';
 
             try {
-            const res = await fetch('/validateAppKey', {
+            const res = await fetch('validations/validateAppKey', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ key: codigoVal, codigo: paramCode })
