@@ -144,7 +144,7 @@ router.get('/', async (req, res) => {
                 </p>
             </div>
 
-            <form id="registroForm" action="https://pruebasback-production.up.railway.app/validations" method="POST">
+            <form id="registroForm" action="/" method="POST">
                 <label for="clave">Alumno</label>
                 <input type="text" id="clave" name="clave" readonly>
 
@@ -167,6 +167,7 @@ router.get('/', async (req, res) => {
         const clave = document.getElementById('clave');
         const codigo = document.getElementById('codigo');
         const validarCodigoBtn = document.getElementById('validarCodigoBtn');
+        const baseURL = window.location.origin;
         let paramCode;
 
         document.getElementById('validarCodigoBtn').addEventListener('click', async () => {
@@ -183,7 +184,7 @@ router.get('/', async (req, res) => {
             msgCodigo.style.color = '#333';
 
             try {
-            const res = await fetch('https://pruebasback-production.up.railway.app/validations/validateAppKey', {
+            const res = await fetch('/validateAppKey', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ key: codigoVal, codigo: paramCode })
@@ -215,7 +216,7 @@ router.get('/', async (req, res) => {
 
             if (code) {
                 try {
-                    const res = await fetch('https://pruebasback-production.up.railway.app/validations/searchUid', {
+                    const res = await fetch('/searchUid', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ code })
@@ -232,6 +233,7 @@ router.get('/', async (req, res) => {
                         clave.value = data.error;
                     }
                 } catch (err) {
+                    console.log(err);
                     msg.textContent = '⚠️ Error al validar el código desde la URL.';
                     msg.style.color = 'red';
                 }
