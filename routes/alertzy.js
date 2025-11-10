@@ -200,6 +200,7 @@ router.get('/', async (req, res) => {
                 registrarBtn.disabled = true;
             }
             } catch (err) {
+            console.log(err);
             msgCodigo.textContent = '⚠️ Error de conexión.';
             msgCodigo.style.color = 'red';
             }
