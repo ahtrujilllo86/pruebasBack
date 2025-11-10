@@ -216,7 +216,7 @@ router.get('/', async (req, res) => {
 
             if (code) {
                 try {
-                    const res = await fetch('/searchUid', {
+                    const res = await fetch('searchUid', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ code })
