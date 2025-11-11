@@ -16,8 +16,6 @@ const alertzy = require('./routes/alertzy');
 app.use(cors());
 app.use(express.json());
 
-app.use('/static', express.static(path.join(__dirname, 'public')));
-
 app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/registros', registrosRoutes);
 app.use('/registros', registrosHTML);
