@@ -281,7 +281,7 @@ router.post('/', express.urlencoded({ extended: true }), async (req, res) => {
         console.warn('No se pudo hacer la petición externa:', err.message);
         return res.status(400).json({ error: true, msg: err.message });
     }
-    res.send(`<h1>El alumno ${clave} ha sido asociado a su cuenta con exito!</h1><br><br><h3>Ya puede cerrar esta pagina</h3>`).status(200);
+    res.send(`<meta name="viewport" content="width=device-width,initial-scale=1" /><h1>El alumno ${clave} ha sido asociado a su cuenta con exito!</h1><br><br><h3>Ya puede cerrar esta pagina</h3>`).status(200);
 });
 
 router.post('/searchUid', async (req, res) => {
