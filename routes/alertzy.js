@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
         <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 40px;
+            margin: 10px;
             background-color: #f4f4f4;
         }
         h1 {
@@ -45,6 +45,7 @@ router.get('/', async (req, res) => {
             box-shadow: 0 0 10px rgba(0,0,0,0.05);
             flex: 1;
             min-width: 220px;
+            width: 90%;
             align-self: flex-start;
         }
         .instructions p {
@@ -58,7 +59,7 @@ router.get('/', async (req, res) => {
         form {
             background: white;
             max-width: 500px;
-            width: 100%;
+            width: 85%;
             margin: 0; /* se controla por columns */
             padding: 30px;
             border-radius: 8px;
