@@ -1,0 +1,113 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 40px;
+    background-color: #f4f4f4;
+}
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+/* layout container */
+.page {
+    display: flex;
+    justify-content: center;
+}
+.columns {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    max-width: 900px;
+}
+
+/* instrucciones */
+.instructions {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    flex: 1;
+    min-width: 220px;
+    align-self: flex-start;
+}
+.instructions p {
+    margin: 0;
+    color: #333;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+/* form (mantener tu estilo original, pero dentro de la columna derecha) */
+form {
+    background: white;
+    max-width: 500px;
+    width: 100%;
+    margin: 0; /* se controla por columns */
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+input:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+.input-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.input-group input {
+    flex: 1;
+    margin-bottom: 0;
+}
+button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+#msg, #msgCodigo {
+    margin-top: 5px;
+    font-size: 14px;
+}
+#registrarBtn {
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* responsive: en pantallas pequeñas, instrucciones debajo del título y formulario debajo */
+@media (max-width: 768px) {
+    .columns {
+    flex-direction: column;
+    }
+    .instructions {
+    order: 1; /* aparece primero dentro de columns, pero como h1 está fuera y centrado, las instrucciones quedarán debajo del título */
+    }
+    form {
+    order: 2;
+    }
+}
