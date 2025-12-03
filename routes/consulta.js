@@ -7,18 +7,34 @@ const moment = require('moment-timezone');
 
 router.post('/', async (req, res) => {
   const { codigo, imagen } = req.body;
+  let accion = 'ingreso';
   if (!codigo) return res.status(400).json({ error: 'Falta el parámetro "codigo"' });
 
   try {
-    // 1) Insertar registro (created_at se llena por defecto si tu columna tiene DEFAULT CURRENT_TIMESTAMP)
-    // const hora_envio = new Date().toLocaleString("es-MX").format('YYYY-MM-DD HH:mm:ss');
-    const hora_envio = moment().tz('America/Mexico_City').format('YYYY-MM-DD HH:mm:ss');
-    const [insertResult] = await pool.query(
-      'INSERT INTO registros (codigo, created_at) VALUES (?, ?)',
-      [codigo, hora_envio]
+
+    // primero revisamos si existe un registro hoy
+    const [accesoPrevio] = await pool.query(
+      `SELECT * 
+      FROM registros 
+      WHERE codigo = ?
+        AND DATE(created_at) = CURDATE()
+      ORDER BY id DESC
+      LIMIT 1`,
+      [codigo]
     );
 
-    const newId = insertResult.insertId;
+    if (accesoPrevio.length > 0) {
+      const estatusAccion = accesoPrevio[0].accion;
+      accion = estatusAccion === 'ingreso' ? 'salio' : 'ingreso';
+    }
+
+
+    // 1) Insertar registro (created_at se llena por defecto si tu columna tiene DEFAULT CURRENT_TIMESTAMP)
+    const hora_envio = moment().tz('America/Mexico_City').format('YYYY-MM-DD HH:mm:ss');
+    await pool.query(
+      'INSERT INTO registros (codigo, created_at, accion) VALUES (?, ?, ?)',
+      [codigo, hora_envio, accion]
+    );
 
     // 2) Obtener datos del usuario de acuerdo al codigo recibido
     const [usuarios] = await pool.query('SELECT * FROM usuarios WHERE codigo = ?', [codigo]);
@@ -34,12 +50,13 @@ router.post('/', async (req, res) => {
     } = usuarios[0];
 
     // 3) Petición externa
-    // const urlExterna = process.env.URL_WASEND;
-    const urlExterna = process.env.URL_ALERTZY;
+    const urlExterna = process.env.URL_WASEND;
+    // const urlExterna = process.env.URL_ALERTZY;
     let respuestaExterna;
     const number = `521${telefono_contacto}`;
     // const apikey = process.env.WA_APIKEY;
-    const message = `El alumno ${alumno} ha ingresado al plantel`;
+    const textAction = accion === 'ingreso' ? 'ingreso al' : 'salio del';
+    const message = `El alumno ${alumno} ${textAction} plantel`;
     const accountKey = alertzy_key
     const title = '';
     const image = imagen ?? '';
@@ -47,8 +64,8 @@ router.post('/', async (req, res) => {
     try {
       const response = await axios.post(
         urlExterna,
-        // { number, message},
-        {accountKey, title, message, image},
+        { number, message},
+        // {accountKey, title, message, image},
         { headers: { 'Content-Type': 'application/json' } }
       );
       respuestaExterna = response.data;
