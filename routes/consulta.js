@@ -43,6 +43,10 @@ router.post('/', async (req, res) => {
       return res.status(404).json({ error: `No se encontró un usuario con el código ${codigo}` });
     }
 
+    if (usuarios.telefono_contacto === '' || usuarios.telefono_contacto === null) {
+      return res.status(404).json({ error: 'tarjeta sin asociar a usuario' });
+    }
+
     const {
       alumno, 
       telefono_contacto, 
@@ -57,7 +61,7 @@ router.post('/', async (req, res) => {
     // const apikey = process.env.WA_APIKEY;
     const textAction = accion === 'ingreso' ? 'ingreso al' : 'salio del';
     const message = `El alumno ${alumno} ${textAction} plantel`;
-    const accountKey = alertzy_key
+    const accountKey = alertzy_key ?? '';
     const title = '';
     const image = imagen ?? '';
 
