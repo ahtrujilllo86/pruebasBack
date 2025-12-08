@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
       return res.status(404).json({ error: `No se encontró un usuario con el código ${codigo}` });
     }
 
-    if (usuarios.telefono_contacto === '' || usuarios.telefono_contacto === null) {
+    if (usuarios[0].telefono_contacto === "" || usuarios[0].telefono_contacto === null) {
       return res.status(404).json({ error: 'tarjeta sin asociar a usuario' });
     }
 
